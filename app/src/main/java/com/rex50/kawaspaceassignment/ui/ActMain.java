@@ -6,17 +6,17 @@ import androidx.fragment.app.FragmentTransaction;
 import android.os.Bundle;
 
 import com.rex50.kawaspaceassignment.R;
-import com.rex50.kawaspaceassignment.databinding.ActivityMainBinding;
+import com.rex50.kawaspaceassignment.databinding.ActMainBinding;
 import com.rex50.kawaspaceassignment.ui.home.FragHome;
 
 public class ActMain extends AppCompatActivity {
 
-    private ActivityMainBinding binding;
+    private ActMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        binding = ActMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         loadHomeFrag();
