@@ -16,7 +16,6 @@ public class UsersResponse implements Serializable {
     @SerializedName("info")
     @Expose
     private Info info;
-    private final static long serialVersionUID = 4143324819632697600L;
 
     public List<User> getResults() {
         return users;

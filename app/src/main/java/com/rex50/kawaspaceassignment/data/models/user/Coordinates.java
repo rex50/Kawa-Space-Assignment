@@ -14,7 +14,6 @@ public class Coordinates implements Serializable {
     @SerializedName("longitude")
     @Expose
     private String longitude;
-    private final static long serialVersionUID = 2487817664042272195L;
 
     public String getLatitude() {
         return latitude;

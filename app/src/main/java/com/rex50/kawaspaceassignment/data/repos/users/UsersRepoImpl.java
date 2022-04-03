@@ -24,8 +24,7 @@ public class UsersRepoImpl implements UsersRepo {
 
     @Override
     public void fetchUsers(UsersRequest usersRequest, OnRequestResponseListener<UsersResponse> requestResponseListener) {
-        Call<UsersResponse> call = remoteUserService.getUsers(usersRequest.getInclude(), usersRequest.getCount());
-        call.enqueue(new Callback<UsersResponse>() {
+        remoteUserService.getUsers(usersRequest.getInclude(), usersRequest.getCount()).enqueue(new Callback<UsersResponse>() {
             @Override
             public void onResponse(@NonNull Call<UsersResponse> call, @NonNull Response<UsersResponse> response) {
                 requestResponseListener.onSuccess(response.body());

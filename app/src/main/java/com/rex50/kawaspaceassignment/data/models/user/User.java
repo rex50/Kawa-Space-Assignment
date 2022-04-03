@@ -29,12 +29,6 @@ public class User implements Serializable {
 
     private boolean isSelected;
 
-    // TODO: remove below cons after testing
-    public User(String s) {
-        name = new Name();
-        name.setTitle(s);
-    }
-
     public boolean isSelected() {
         return isSelected;
     }
@@ -89,6 +83,10 @@ public class User implements Serializable {
 
     public void setNat(String nat) {
         this.nat = nat;
+    }
+
+    public String getFormattedGender() {
+        return gender.substring(0, 1).toUpperCase() + gender.substring(1);
     }
 
 }

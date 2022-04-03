@@ -29,7 +29,6 @@ public class Location implements Serializable {
     @SerializedName("timezone")
     @Expose
     private Timezone timezone;
-    private final static long serialVersionUID = -5016444027415771208L;
 
     public Street getStreet() {
         return street;
@@ -85,6 +84,14 @@ public class Location implements Serializable {
 
     public void setTimezone(Timezone timezone) {
         this.timezone = timezone;
+    }
+
+    public String getFormattedLocation() {
+        return street.getNumber() + ", " + street.getName() + ", " + city + ", " + country + ", " + postcode;
+    }
+
+    public String getFormattedTimezone() {
+        return timezone.getOffset() + " - " + timezone.getDescription();
     }
 
 }

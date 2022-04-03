@@ -10,13 +10,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.rex50.kawaspaceassignment.data.models.SelectedUserData;
 import com.rex50.kawaspaceassignment.data.models.UsersRequest;
 import com.rex50.kawaspaceassignment.data.models.user.User;
 import com.rex50.kawaspaceassignment.data.source.remote.services.UsersService;
 import com.rex50.kawaspaceassignment.databinding.FragHomeBinding;
-import com.rex50.kawaspaceassignment.ui.home.list.UsersListAdapter;
+import com.rex50.kawaspaceassignment.ui.home.adapters.UserDetailsAdapter;
+import com.rex50.kawaspaceassignment.ui.home.adapters.UsersListAdapter;
 
 import java.util.ArrayList;
 
@@ -28,8 +30,12 @@ public class FragHome extends Fragment {
     private FragHomeViewModel viewModel;
 
     private FragHomeBinding binding;
+
+    private ArrayList<User> users;
     
     private UsersListAdapter usersListAdapter;
+
+    private UserDetailsAdapter userDetailsAdapter;
 
     private SelectedUserData selectedUser;
 
@@ -52,6 +58,8 @@ public class FragHome extends Fragment {
 
         initRecycler();
 
+        initViewpager();
+
         initClicks();
 
         setupObservers();
@@ -64,11 +72,51 @@ public class FragHome extends Fragment {
         binding.recUsers.setAdapter(usersListAdapter);
     }
 
+    private void initViewpager() {
+        userDetailsAdapter = new UserDetailsAdapter(new ArrayList<>());
+        binding.viewPager2.setAdapter(userDetailsAdapter);
+        binding.viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                updateSelectedUser(users.get(position), position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                super.onPageScrollStateChanged(state);
+            }
+        });
+    }
 
     private void initClicks() {
         usersListAdapter.setOnClickListener(((position, user) -> {
             updateSelectedUser(user, position);
+            binding.viewPager2.setCurrentItem(position, true);
         }));
+
+        binding.btnBack.setOnClickListener(v -> {
+            int index = binding.viewPager2.getCurrentItem() - 1;
+            if(index != -1) {
+                binding.viewPager2.setCurrentItem(index, true);
+                binding.recUsers.scrollToPosition(index);
+                updateSelectedUser(users.get(index), index);
+            }
+        });
+
+        binding.btnNext.setOnClickListener(v -> {
+            int index = binding.viewPager2.getCurrentItem() + 1;
+            if(index != userDetailsAdapter.getItemCount()) {
+                binding.viewPager2.setCurrentItem(index, true);
+                binding.recUsers.scrollToPosition(index);
+                updateSelectedUser(users.get(index), index);
+            }
+        });
     }
 
     private void updateSelectedUser(User user, int position) {
@@ -93,21 +141,27 @@ public class FragHome extends Fragment {
             switch (data.getStatus()) {
                 case LOADING:
                     showLoader(true);
+                    binding.btnNext.setVisibility(View.GONE);
+                    binding.btnBack.setVisibility(View.GONE);
                     break;
                     
                 case SUCCESS:
                     showLoader(false);
+                    binding.btnNext.setVisibility(View.VISIBLE);
+                    binding.btnBack.setVisibility(View.VISIBLE);
+                    users = data.getData();
+                    if(users == null)
+                        users = new ArrayList<>();
 
-                    if(selectedUser == null && data.getData() != null && data.getData().size() != 0) {
+                    if(selectedUser == null && users.size() != 0) {
                         // No user is selected so select 1st user
                         User firstUser = data.getData().get(0);
                         firstUser.setSelected(true);
                         selectedUser = new SelectedUserData(firstUser, 0);
                     }
 
-                    usersListAdapter.update(data.getData());
-
-                    // TODO: Update top view pager
+                    usersListAdapter.update(users);
+                    userDetailsAdapter.update(users);
                     break;
                     
                 case ERROR:

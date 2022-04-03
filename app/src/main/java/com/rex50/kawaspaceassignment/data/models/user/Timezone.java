@@ -14,7 +14,6 @@ public class Timezone implements Serializable {
     @SerializedName("description")
     @Expose
     private String description;
-    private final static long serialVersionUID = 8086094657200331532L;
 
     public String getOffset() {
         return offset;

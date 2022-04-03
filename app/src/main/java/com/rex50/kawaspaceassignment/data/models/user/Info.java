@@ -20,7 +20,6 @@ public class Info implements Serializable {
     @SerializedName("version")
     @Expose
     private String version;
-    private final static long serialVersionUID = -8465709616681494912L;
 
     public String getSeed() {
         return seed;

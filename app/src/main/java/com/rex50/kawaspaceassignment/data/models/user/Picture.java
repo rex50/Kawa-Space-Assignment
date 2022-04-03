@@ -17,7 +17,6 @@ public class Picture implements Serializable {
     @SerializedName("thumbnail")
     @Expose
     private String thumbnail;
-    private final static long serialVersionUID = 9042893997979040601L;
 
     public String getLarge() {
         return large;

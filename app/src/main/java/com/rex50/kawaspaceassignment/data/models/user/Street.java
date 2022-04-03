@@ -14,7 +14,6 @@ public class Street implements Serializable {
     @SerializedName("name")
     @Expose
     private String name;
-    private final static long serialVersionUID = -9168787897790432222L;
 
     public Integer getNumber() {
         return number;

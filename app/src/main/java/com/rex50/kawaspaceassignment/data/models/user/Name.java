@@ -17,7 +17,6 @@ public class Name implements Serializable {
     @SerializedName("last")
     @Expose
     private String last;
-    private final static long serialVersionUID = 5606665049102244540L;
 
     public String getTitle() {
         return title;
@@ -43,4 +42,7 @@ public class Name implements Serializable {
         this.last = last;
     }
 
+    public String getFormatted() {
+        return String.format("%s. %s %s",getTitle(), getFirst(), getLast());
+    }
 }

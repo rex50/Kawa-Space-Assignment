@@ -1,4 +1,4 @@
-package com.rex50.kawaspaceassignment.ui.home.list;
+package com.rex50.kawaspaceassignment.ui.home.adapters;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -37,9 +37,6 @@ public class UsersListAdapter extends RecyclerView.Adapter<UsersListAdapter.User
     }
 
     public void update(ArrayList<User> users) {
-        if(users == null)
-            users = new ArrayList<>();
-
         this.users = users;
         // TODO: use DiffUtil for better performance
         notifyDataSetChanged();
@@ -60,11 +57,10 @@ public class UsersListAdapter extends RecyclerView.Adapter<UsersListAdapter.User
         User user = users.get(position);
 
         // Bind UI elements
-        String formattedName = String.format("%s. %s %s", user.getName().getTitle(), user.getName().getFirst(), user.getName().getLast());
-        holder.binding.tvName.setText(formattedName);
+        holder.binding.tvName.setText(user.getName().getFormatted());
         holder.binding.cardPage.setBackground(user.isSelected() ? selectedDrawable : unSelectedDrawable);
         holder.binding.tvNationality.setText(user.getNat());
-        holder.binding.tvGender.setText(user.getGender());
+        holder.binding.tvGender.setText(user.getFormattedGender());
         holder.binding.tvEmail.setText(user.getEmail());
 
         // Change colors of UI based on select state
