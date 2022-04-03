@@ -1,10 +1,11 @@
-package com.rex50.kawaspaceassignment.ui.home;
+package com.rex50.kawaspaceassignment.ui.home.list;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,13 +24,22 @@ public class UsersListAdapter extends RecyclerView.Adapter<UsersListAdapter.User
 
     private final Drawable selectedDrawable, unSelectedDrawable;
 
+    @ColorInt
+    private final int colorWhite, colorRed, colorBlack;
+
     public UsersListAdapter(Context context, ArrayList<User> users) {
         this.users = users;
         selectedDrawable = ContextCompat.getDrawable(context, R.drawable.bg_selected);
         unSelectedDrawable = ContextCompat.getDrawable(context, R.drawable.bg_un_selected);
+        colorWhite = ContextCompat.getColor(context, R.color.white);
+        colorBlack = ContextCompat.getColor(context, R.color.black);
+        colorRed = ContextCompat.getColor(context, R.color.redColor);
     }
 
     public void update(ArrayList<User> users) {
+        if(users == null)
+            users = new ArrayList<>();
+
         this.users = users;
         // TODO: use DiffUtil for better performance
         notifyDataSetChanged();
@@ -49,9 +59,31 @@ public class UsersListAdapter extends RecyclerView.Adapter<UsersListAdapter.User
     public void onBindViewHolder(@NonNull UserViewHolder holder, int position) {
         User user = users.get(position);
 
-        // Update UI elements
-        holder.binding.tvName.setText(user.getName().getTitle());
+        // Bind UI elements
+        String formattedName = String.format("%s. %s %s", user.getName().getTitle(), user.getName().getFirst(), user.getName().getLast());
+        holder.binding.tvName.setText(formattedName);
         holder.binding.cardPage.setBackground(user.isSelected() ? selectedDrawable : unSelectedDrawable);
+        holder.binding.tvNationality.setText(user.getNat());
+        holder.binding.tvGender.setText(user.getGender());
+        holder.binding.tvEmail.setText(user.getEmail());
+
+        // Change colors of UI based on select state
+        if(user.isSelected()) {
+            holder.binding.cardPage.setBackground(selectedDrawable);
+            holder.binding.tvName.setTextColor(colorWhite);
+            holder.binding.tvEmail.setTextColor(colorWhite);
+            holder.binding.tvDot.setTextColor(colorWhite);
+            holder.binding.tvGender.setTextColor(colorWhite);
+            holder.binding.tvNationality.setTextColor(colorWhite);
+        } else {
+            holder.binding.cardPage.setBackground(unSelectedDrawable);
+            holder.binding.tvName.setTextColor(colorBlack);
+            holder.binding.tvEmail.setTextColor(colorRed);
+            holder.binding.tvDot.setTextColor(colorBlack);
+            holder.binding.tvGender.setTextColor(colorBlack);
+            holder.binding.tvNationality.setTextColor(colorBlack);
+        }
+
         if (listener != null) {
             holder.binding.cardPage.setOnClickListener(v -> listener.onClicked(position, user));
         }

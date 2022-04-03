@@ -9,6 +9,9 @@ import com.rex50.kawaspaceassignment.R;
 import com.rex50.kawaspaceassignment.databinding.ActMainBinding;
 import com.rex50.kawaspaceassignment.ui.home.FragHome;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class ActMain extends AppCompatActivity {
 
     private ActMainBinding binding;
@@ -19,7 +22,14 @@ public class ActMain extends AppCompatActivity {
         binding = ActMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        hideDefaultSupportBar();
+
         loadHomeFrag();
+    }
+
+    private void hideDefaultSupportBar() {
+        if(getSupportActionBar() != null)
+            getSupportActionBar().hide();
     }
 
     private void loadHomeFrag() {

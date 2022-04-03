@@ -2,6 +2,7 @@
 package com.rex50.kawaspaceassignment.data.models.user;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gson.annotations.Expose;
@@ -9,7 +10,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class UsersResponse implements Serializable {
 
-    @SerializedName("users")
+    @SerializedName("results")
     @Expose
     private List<User> users = null;
     @SerializedName("info")

@@ -22,7 +22,7 @@ public class Location implements Serializable {
     private String country;
     @SerializedName("postcode")
     @Expose
-    private Integer postcode;
+    private String postcode;
     @SerializedName("coordinates")
     @Expose
     private Coordinates coordinates;
@@ -63,11 +63,11 @@ public class Location implements Serializable {
         this.country = country;
     }
 
-    public Integer getPostcode() {
+    public String getPostcode() {
         return postcode;
     }
 
-    public void setPostcode(Integer postcode) {
+    public void setPostcode(String postcode) {
         this.postcode = postcode;
     }
 

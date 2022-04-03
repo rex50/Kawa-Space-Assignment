@@ -12,11 +12,17 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.rex50.kawaspaceassignment.data.models.SelectedUserData;
+import com.rex50.kawaspaceassignment.data.models.UsersRequest;
 import com.rex50.kawaspaceassignment.data.models.user.User;
+import com.rex50.kawaspaceassignment.data.source.remote.services.UsersService;
 import com.rex50.kawaspaceassignment.databinding.FragHomeBinding;
+import com.rex50.kawaspaceassignment.ui.home.list.UsersListAdapter;
 
 import java.util.ArrayList;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class FragHome extends Fragment {
 
     private FragHomeViewModel viewModel;
@@ -41,6 +47,7 @@ public class FragHome extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         viewModel = new ViewModelProvider(this).get(FragHomeViewModel.class);
 
         initRecycler();
@@ -49,7 +56,7 @@ public class FragHome extends Fragment {
 
         setupObservers();
 
-        viewModel.getUsers();
+        viewModel.getUsers(new UsersRequest(UsersService.DEFAULT_INCLUDE, 20));
     }
 
     private void initRecycler() {
@@ -82,7 +89,7 @@ public class FragHome extends Fragment {
     }
 
     private void setupObservers() {
-        viewModel.users.observe(requireActivity(), data -> {
+        viewModel.users.observe(getViewLifecycleOwner(), data -> {
             switch (data.getStatus()) {
                 case LOADING:
                     showLoader(true);
@@ -91,7 +98,7 @@ public class FragHome extends Fragment {
                 case SUCCESS:
                     showLoader(false);
 
-                    if(selectedUser == null && data.getData().size() != 0) {
+                    if(selectedUser == null && data.getData() != null && data.getData().size() != 0) {
                         // No user is selected so select 1st user
                         User firstUser = data.getData().get(0);
                         firstUser.setSelected(true);

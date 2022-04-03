@@ -1,43 +1,54 @@
 package com.rex50.kawaspaceassignment.ui.home;
 
-import android.os.Handler;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModel;
 
+import com.rex50.kawaspaceassignment.data.OnRequestResponseListener;
+import com.rex50.kawaspaceassignment.data.models.UsersRequest;
 import com.rex50.kawaspaceassignment.data.models.user.User;
+import com.rex50.kawaspaceassignment.data.models.user.UsersResponse;
+import com.rex50.kawaspaceassignment.data.repos.users.UsersRepo;
 import com.rex50.kawaspaceassignment.utils.Data;
 import com.rex50.kawaspaceassignment.utils.Status;
 
 import java.util.ArrayList;
-import java.util.Random;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.lifecycle.HiltViewModel;
+
+@HiltViewModel
 public class FragHomeViewModel extends ViewModel {
 
-    private MutableLiveData<Data<ArrayList<User>>> _users = new MutableLiveData<>();
-    public LiveData<Data<ArrayList<User>>> users = _users;
+    private final UsersRepo repo;
 
-    public void getUsers() {
-        _users.postValue(new Data<>(Status.LOADING));
-        new Handler().postDelayed(() -> {
-            if(new Random().nextBoolean())
-                _users.postValue(new Data<>(Status.SUCCESS, getDummyUsers()));
-            else
-                _users.postValue(new Data<>(Status.ERROR, new Exception("Error")));
-        }, 2000);
+    @Inject
+    public FragHomeViewModel(SavedStateHandle handle, UsersRepo repo) {
+        this.repo = repo;
     }
 
-    private ArrayList<User> getDummyUsers() {
-        ArrayList<User> users = new ArrayList<>();
-        users.add(new User("User 1"));
-        users.add(new User("User 2"));
-        users.add(new User("User 3"));
-        users.add(new User("User 4"));
-        users.add(new User("User 5"));
-        users.add(new User("User 6"));
-        users.add(new User("User 7"));
-        return users;
+    private final MutableLiveData<Data<ArrayList<User>>> _users = new MutableLiveData<>();
+    public LiveData<Data<ArrayList<User>>> users = _users;
+
+    public void getUsers(UsersRequest request) {
+        _users.postValue(new Data<>(Status.LOADING));
+        repo.fetchUsers(request, new OnRequestResponseListener<UsersResponse>() {
+            @Override
+            public void onSuccess(UsersResponse response) {
+                // Post value to live data
+                ArrayList<User> users = new ArrayList<>();
+                if(response.getResults() != null)
+                    users.addAll(response.getResults());
+                _users.postValue(new Data<>(Status.SUCCESS, users));
+            }
+
+            @Override
+            public void onFailed(Throwable e) {
+                _users.postValue(new Data<>(Status.ERROR, new Exception("Error")));
+            }
+        });
     }
 
 }
