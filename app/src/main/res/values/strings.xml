@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Kawa Space Assignment</string>
+    <string name="profile_picture">Profile picture</string>
+    <string name="dot">.</string>
 </resources>
