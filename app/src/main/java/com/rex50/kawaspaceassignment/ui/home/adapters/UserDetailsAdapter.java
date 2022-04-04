@@ -47,14 +47,11 @@ public class UserDetailsAdapter extends RecyclerView.Adapter<UserDetailsAdapter.
 
         holder.binding.tvLocation.setText(user.getLocation().getFormattedLocation());
         CustomSpanStrings.withTextView(holder.binding.tvLocation)
-                .applyColor(Color.parseColor("#A259FF"),
-                        user.getLocation().getStreet().getNumber().toString())
+                .applyColor(Color.parseColor("#A259FF"), user.getLocation().getStreet().getNumber().toString())
+                .applyBold(user.getLocation().getCountry())
                 .commit();
 
         holder.binding.tvTimeZone.setText(user.getLocation().getFormattedTimezone());
-        CustomSpanStrings.withTextView(holder.binding.tvTimeZone)
-                .applyBold(user.getLocation().getCountry())
-                .commit();
 
         Glide.with(holder.binding.ivProfile)
                 .load(user.getPicture().getMedium())
