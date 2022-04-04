@@ -52,8 +52,7 @@
                 android:id="@+id/viewPager2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginHorizontal="4dp"
+                android:layout_marginTop="24dp"
                 app:layout_constraintEnd_toStartOf="@+id/btnNext"
                 app:layout_constraintStart_toEndOf="@+id/btnBack"
                 app:layout_constraintTop_toBottomOf="@+id/textView"
@@ -63,26 +62,26 @@
                 android:id="@+id/btnBack"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:padding="6dp"
-                android:src="@drawable/ic_arrow_back"
+                android:layout_marginStart="6dp"
                 android:foreground="?selectableItemBackground"
+                android:padding="4dp"
+                android:src="@drawable/ic_arrow_back"
                 app:layout_constraintBottom_toBottomOf="@+id/viewPager2"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@+id/viewPager2" />
 
             <ImageView
                 android:id="@+id/btnNext"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:padding="6dp"
+                android:layout_marginEnd="6dp"
+                android:foreground="?selectableItemBackground"
+                android:padding="4dp"
                 android:rotation="180"
                 android:src="@drawable/ic_arrow_back"
-                android:foreground="?selectableItemBackground"
                 app:layout_constraintBottom_toBottomOf="@+id/viewPager2"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@+id/viewPager2" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recUsers"
