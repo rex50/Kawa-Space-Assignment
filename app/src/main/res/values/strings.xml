@@ -4,4 +4,8 @@
     <string name="dot">.</string>
     <string name="your_challenge">Your Challenge</string>
     <string name="menu">Menu</string>
+    <string name="product">Product</string>
+    <string name="download">Download</string>
+    <string name="pricing">Pricing</string>
+    <string name="dismiss_menu">Dismiss menu</string>
 </resources>

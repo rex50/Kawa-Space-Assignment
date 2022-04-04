@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="16dp"
+    android:elevation="10dp"
+    android:layout_margin="8dp"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_un_selected"
+        android:paddingBottom="18dp"
+        android:paddingTop="24dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/menuProduct"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:text="@string/product"
+            android:tag="@string/product"
+            android:gravity="center_vertical"
+            android:paddingVertical="12dp"
+            android:paddingHorizontal="24dp"
+            android:drawablePadding="8dp"
+            android:textColor="@color/black"
+            android:foreground="?selectableItemBackground"
+            app:drawableStartCompat="@drawable/ic_product" />
+
+        <TextView
+            android:id="@+id/menuDownload"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:text="@string/download"
+            android:tag="@string/download"
+            android:gravity="center_vertical"
+            android:paddingVertical="12dp"
+            android:paddingHorizontal="24dp"
+            android:drawablePadding="8dp"
+            android:textColor="@color/black"
+            android:foreground="?selectableItemBackground"
+            app:drawableStartCompat="@drawable/ic_downloads" />
+
+        <TextView
+            android:id="@+id/menuPricing"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:text="@string/pricing"
+            android:tag="@string/pricing"
+            android:gravity="center_vertical"
+            android:paddingVertical="12dp"
+            android:paddingHorizontal="24dp"
+            android:drawablePadding="8dp"
+            android:textColor="@color/black"
+            android:foreground="?selectableItemBackground"
+            app:drawableStartCompat="@drawable/ic_pricing" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/btnDismiss"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:padding="8dp"
+        android:foreground="?selectableItemBackground"
+        android:src="@drawable/ic_dismiss"
+        android:contentDescription="@string/dismiss_menu" />
+
+</androidx.cardview.widget.CardView>

@@ -1,22 +1,28 @@
 package com.rex50.kawaspaceassignment.ui.home;
 
+import android.content.Context;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.rex50.kawaspaceassignment.R;
 import com.rex50.kawaspaceassignment.data.models.SelectedUserData;
 import com.rex50.kawaspaceassignment.data.models.UsersRequest;
 import com.rex50.kawaspaceassignment.data.models.user.User;
 import com.rex50.kawaspaceassignment.data.source.remote.services.UsersService;
 import com.rex50.kawaspaceassignment.databinding.FragHomeBinding;
+import com.rex50.kawaspaceassignment.databinding.LayoutPopupMenuBinding;
 import com.rex50.kawaspaceassignment.ui.home.adapters.UserDetailsAdapter;
 import com.rex50.kawaspaceassignment.ui.home.adapters.UsersListAdapter;
 
@@ -100,6 +106,8 @@ public class FragHome extends Fragment {
             binding.viewPager2.setCurrentItem(position, true);
         }));
 
+        binding.btnMenu.setOnClickListener(this::showPopup);
+
         binding.btnBack.setOnClickListener(v -> {
             int index = binding.viewPager2.getCurrentItem() - 1;
             if(index != -1) {
@@ -179,4 +187,28 @@ public class FragHome extends Fragment {
     private void showToast(String msg) {
         Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show();
     }
+
+    public void showPopup(View anchor) {
+        LayoutInflater layoutInflater = (LayoutInflater) requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        final LayoutPopupMenuBinding popupBinding = LayoutPopupMenuBinding.inflate(layoutInflater);
+
+        PopupWindow popupWindow = new PopupWindow(
+                popupBinding.getRoot(),
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        View.OnClickListener clickListener = view -> {
+            showToast("Menu clicked: " + view.getTag());
+            popupWindow.dismiss();
+        };
+        popupBinding.menuDownload.setOnClickListener(clickListener);
+        popupBinding.menuPricing.setOnClickListener(clickListener);
+        popupBinding.menuProduct.setOnClickListener(clickListener);
+        popupBinding.btnDismiss.setOnClickListener(v -> popupWindow.dismiss());
+
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setElevation(10F);
+        popupWindow.showAsDropDown(anchor, -180, -60);
+    }
+
 }
