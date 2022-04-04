@@ -1,5 +1,6 @@
 package com.rex50.kawaspaceassignment.ui.home.adapters;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -10,6 +11,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.rex50.kawaspaceassignment.data.models.user.User;
 import com.rex50.kawaspaceassignment.databinding.ItemUserDetailsBinding;
+import com.rex50.kawaspaceassignment.utils.CustomSpanStrings;
 
 import java.util.ArrayList;
 
@@ -35,11 +37,24 @@ public class UserDetailsAdapter extends RecyclerView.Adapter<UserDetailsAdapter.
     @Override
     public void onBindViewHolder(@NonNull UserDetailViewHolder holder, int position) {
         User user = users.get(position);
-        holder.binding.tvName.setText(user.getName().getFormatted());
+
         holder.binding.tvGender.setText(user.getFormattedGender());
-        // TODO: use stringSpanBuilder for styling (color, weight) string
+
+        holder.binding.tvName.setText(user.getName().getFormatted());
+        CustomSpanStrings.withTextView(holder.binding.tvName)
+                .applyUnderline(user.getName().getFormatted())
+                .commit();
+
         holder.binding.tvLocation.setText(user.getLocation().getFormattedLocation());
+        CustomSpanStrings.withTextView(holder.binding.tvLocation)
+                .applyColor(Color.parseColor("#A259FF"),
+                        user.getLocation().getStreet().getNumber().toString())
+                .commit();
+
         holder.binding.tvTimeZone.setText(user.getLocation().getFormattedTimezone());
+        CustomSpanStrings.withTextView(holder.binding.tvTimeZone)
+                .applyBold(user.getLocation().getCountry())
+                .commit();
 
         Glide.with(holder.binding.ivProfile)
                 .load(user.getPicture().getMedium())
