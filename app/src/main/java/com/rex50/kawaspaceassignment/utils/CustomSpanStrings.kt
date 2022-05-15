@@ -1,70 +1,104 @@
-package com.rex50.kawaspaceassignment.utils;
+package com.rex50.kawaspaceassignment.utils
 
-import android.graphics.Typeface;
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.StyleSpan;
-import android.text.style.UnderlineSpan;
-import android.widget.TextView;
+import android.text.SpannableStringBuilder
+import android.widget.TextView
+import androidx.annotation.ColorInt
+import android.text.style.ForegroundColorSpan
+import android.text.Spanned
+import android.text.style.UnderlineSpan
+import android.text.style.StyleSpan
+import android.graphics.Typeface
+import android.text.style.ClickableSpan
+import android.text.method.LinkMovementMethod
+import android.view.View
 
-import androidx.annotation.ColorInt;
+class CustomSpanStrings private constructor() {
+    private var completeString: String = ""
+    private var spannableStringBuilder: SpannableStringBuilder? = null
+    private var textView: TextView? = null
 
-public class CustomSpanStrings {
-
-    private String completeString;
-    private SpannableStringBuilder spannableStringBuilder;
-    private TextView textView;
-
-    private CustomSpanStrings() {}
-
-    public static CustomSpanStrings withTextView(TextView textView) {
-        if(textView == null)
-            throw new IllegalArgumentException("TextView should not be null");
-
-        CustomSpanStrings spanStrings = new CustomSpanStrings();
-        spanStrings.textView = textView;
-        spanStrings.completeString = textView.getText().toString();
-        spanStrings.spannableStringBuilder = new SpannableStringBuilder(spanStrings.completeString);
-        return spanStrings;
-    }
-
-    public CustomSpanStrings applyColor(@ColorInt int color, String... texts) {
-        for (String text : texts) {
-            int startIndex = completeString.indexOf(text);
-            if(startIndex != -1) {
-                spannableStringBuilder.setSpan(new ForegroundColorSpan(color), startIndex,
-                        startIndex + text.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+    fun applyColor(
+        @ColorInt color: Int,
+        vararg texts: String
+    ): CustomSpanStrings {
+        for (text in texts) {
+            val startIndex = completeString.indexOf(text)
+            if (startIndex != -1) {
+                spannableStringBuilder?.setSpan(
+                    ForegroundColorSpan(color), startIndex,
+                    startIndex + text.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
             }
         }
-        return this;
+        return this
     }
 
-    public CustomSpanStrings applyUnderline(String... texts) {
-        for (String text : texts) {
-            int startIndex = completeString.indexOf(text);
-            if(startIndex != -1) {
-                spannableStringBuilder.setSpan(new UnderlineSpan() {}, completeString.indexOf(text),
-                        completeString.indexOf(text) + text.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+    fun applyUnderline(vararg texts: String): CustomSpanStrings {
+        for (text in texts) {
+            val startIndex = completeString.indexOf(text)
+            if (startIndex != -1) {
+                spannableStringBuilder?.setSpan(
+                    object : UnderlineSpan() {}, startIndex,
+                    startIndex + text.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
             }
         }
-        return this;
+        return this
     }
 
-    public CustomSpanStrings applyBold(String... texts) {
-        for (String text : texts) {
-            int startIndex = completeString.indexOf(text);
-            if(startIndex != -1) {
-                spannableStringBuilder.setSpan(new StyleSpan(Typeface.BOLD), completeString.indexOf(text),
-                        completeString.indexOf(text) + text.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+    fun applyBold(vararg texts: String): CustomSpanStrings {
+        for (text in texts) {
+            val startIndex = completeString.indexOf(text)
+            if (startIndex != -1) {
+                spannableStringBuilder?.setSpan(
+                    StyleSpan(Typeface.BOLD), startIndex,
+                    startIndex + text.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
             }
         }
-        return this;
+        return this
     }
 
-    public void commit() {
-        if(textView != null)
-            textView.setText(spannableStringBuilder, TextView.BufferType.SPANNABLE);
+    fun addClickListener(
+        text: String,
+        clickListener: OnCustomSpanClickListener
+    ): CustomSpanStrings {
+        val startIndex = completeString.indexOf(text)
+        if (startIndex != -1) {
+            autoDetectLinks()
+            spannableStringBuilder?.setSpan(object : ClickableSpan() {
+                override fun onClick(view: View) {
+                    clickListener.onSpanClicked(view)
+                }
+            }, startIndex, startIndex + text.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+        return this
     }
 
+    fun autoDetectLinks(): CustomSpanStrings {
+        textView?.movementMethod = LinkMovementMethod.getInstance()
+        return this
+    }
+
+    fun commit() {
+        textView?.setText(
+            spannableStringBuilder,
+            TextView.BufferType.SPANNABLE
+        )
+    }
+
+    fun interface OnCustomSpanClickListener {
+        fun onSpanClicked(view: View?)
+    }
+
+    companion object {
+        @JvmStatic
+        fun withTextView(textView: TextView): CustomSpanStrings {
+            val spanStrings = CustomSpanStrings()
+            spanStrings.textView = textView
+            spanStrings.completeString = textView.text.toString()
+            spanStrings.spannableStringBuilder = SpannableStringBuilder(spanStrings.completeString)
+            return spanStrings
+        }
+    }
 }

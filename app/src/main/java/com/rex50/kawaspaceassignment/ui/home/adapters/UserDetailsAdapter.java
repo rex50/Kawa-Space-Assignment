@@ -3,6 +3,7 @@ package com.rex50.kawaspaceassignment.ui.home.adapters;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -42,6 +43,9 @@ public class UserDetailsAdapter extends RecyclerView.Adapter<UserDetailsAdapter.
 
         holder.binding.tvName.setText(user.getName().getFormatted());
         CustomSpanStrings.withTextView(holder.binding.tvName)
+                .addClickListener(user.getName().getFormatted(), v -> {
+                    Toast.makeText(v.getContext(), user.getName().getFormatted(), Toast.LENGTH_SHORT).show();
+                })
                 .applyUnderline(user.getName().getFormatted())
                 .commit();
 

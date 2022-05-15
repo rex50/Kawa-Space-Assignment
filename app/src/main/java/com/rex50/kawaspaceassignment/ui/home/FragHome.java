@@ -62,6 +62,8 @@ public class FragHome extends Fragment {
 
         viewModel = new ViewModelProvider(this).get(FragHomeViewModel.class);
 
+        new TitlePresenter(binding.textView);
+
         initRecycler();
 
         initViewpager();
